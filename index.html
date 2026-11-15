@@ -327,7 +327,7 @@ footer{background:var(--night);border-top:1px solid var(--line);padding:90px 0 3
   .wrap{width:calc(100% - 40px)}
   .brand .w{width:104px}.brand .m{width:18px;height:25px}
   .hero{padding:96px 0 0;align-items:start;min-height:100svh}
-  .hero-word{top:36%;font-size:22.5vw}
+  .hero-word{top:27%;font-size:17.5vw;letter-spacing:.02em}
   .bottle{height:min(54svh,480px);margin-top:4vh}
   .hero-meta{bottom:28px}
   .hero-meta .wrap{flex-direction:column;align-items:stretch;gap:0}
@@ -335,7 +335,8 @@ footer{background:var(--night);border-top:1px solid var(--line);padding:90px 0 3
   .hero-copy .eyebrow{display:none}
   .hero-copy h1{font-size:23px;margin:0 0 20px}
   .hero-ctas{justify-content:center}
-  .hero-ctas .btn{height:50px;padding:0 24px;flex:1;justify-content:center}
+  .hero-ctas{flex-wrap:nowrap;gap:10px}
+  .hero-ctas .btn{height:50px;padding:0 14px;flex:1;justify-content:center;letter-spacing:.2em;font-size:10.5px;white-space:nowrap}
   .badge,.side-note,.scroll-cue{display:none}
   .coll-pin{position:relative;height:auto;padding:110px 0 90px}
   .coll-head{flex-direction:column;align-items:flex-start;margin-bottom:34px}
@@ -488,7 +489,7 @@ footer{background:var(--night);border-top:1px solid var(--line);padding:90px 0 3
         <div class="eyebrow" data-r>The Signature</div>
         <h2 class="line-split" data-split><span class="gold-text">Alfaro</span></h2>
         <p data-r>Saffron glows over supple leather, while amber and oud bring a smoky, resinous depth. Bold, warm and unmistakable.</p>
-        <div style="margin-top:30px" data-r><a href="#" class="btn btn-gold magnetic" data-add="Alfaro" data-h><span class="lbl">Add to bag <svg class="arr"><use href="#arr"/></svg></span></a></div>
+        <div style="margin-top:30px" data-r><a href="#" class="btn btn-gold magnetic" data-add="alfaro" data-nm="Alfaro" data-h><span class="lbl">Add to bag <svg class="arr"><use href="#arr"/></svg></span></a></div>
       </div></div>
     </div>
   </div>
@@ -592,7 +593,7 @@ const img=p=>'img/'+(p.id==='alfaro'?'alfaro-wide':p.id)+'.jpg';
 /* ---------- build collection ---------- */
 const track=$('#track');
 track.innerHTML=P.map((p,i)=>`
- <article class="card" style="--tint:${p.tint}" data-cursor="view" data-add="${p.name}">
+ <article class="card" style="--tint:${p.tint}" data-cursor="view" data-go="${p.id}">
   <div class="card-img"><img src="${img(p)}" alt="Zalbera ${p.name} eau de parfum" loading="lazy" style="${p.id==='alfaro'?'object-position:50% 50%;':''}">
    <div class="card-notes">${p.notes.map(n=>`<span>${n}</span>`).join('')}</div></div>
   <div class="card-info"><div><div class="no">${String(i+1).padStart(2,'0')} · Eau de parfum</div><h3>${p.name}</h3><p>${p.prof}</p></div>
@@ -733,7 +734,7 @@ function showPick(id,first){
   if(id==='alfaro') ni.style.objectPosition='50% 50%';
   mImg.appendChild(ni); requestAnimationFrame(()=>requestAnimationFrame(()=>{ni.classList.remove('out'); if(old&&old!==ni){old.classList.add('out');setTimeout(()=>old.remove(),1000)}}));
   const alts=MOODS[curMood].filter(x=>x!==id).map(x=>`<button data-pick="${x}">${P.find(q=>q.id===x).name}</button>`).join(' &nbsp;·&nbsp; ');
-  const fill=()=>{mInfo.innerHTML=`<div class="no">Your match</div><h3>${p.name}</h3><p>${p.about}</p><a href="#" class="btn btn-gold" data-add="${p.name}" data-h><span class="lbl">Add to bag <svg class="arr"><use href="#arr"/></svg></span></a>${alts?`<div class="alts">Also try &nbsp; ${alts}</div>`:''}`};
+  const fill=()=>{mInfo.innerHTML=`<div class="no">Your match</div><h3>${p.name}</h3><p>${p.about}</p><a href="product.html#${p.id}" class="link-u" style="margin:0 0 22px;display:inline-flex">View fragrance <svg class="arr"><use href="#arr"/></svg></a><br><a href="#" class="btn btn-gold" data-add="${p.id}" data-nm="${p.name}" data-h><span class="lbl">Add to bag <svg class="arr"><use href="#arr"/></svg></span></a>${alts?`<div class="alts">Also try &nbsp; ${alts}</div>`:''}`};
   if(first){fill();return}
   mInfo.classList.add('out'); setTimeout(()=>{fill();mInfo.classList.remove('out')},420);
 }
@@ -742,18 +743,20 @@ mInfo.addEventListener('click',e=>{const b=e.target.closest('[data-pick]');if(b)
 showPick('alfaro',true);
 
 /* ---------- bag + toast ---------- */
-let bag=0; try{bag=+localStorage.getItem('zal-bag')||0}catch(e){}
+const rd=()=>{try{return JSON.parse(localStorage.getItem('zal6-cart'))||[]}catch(_){return []}};
 const bagN=$('#bagN'),toast=$('#toast'); let tt;
-const setBag=()=>{bagN.textContent=bag;bagN.classList.toggle('on',bag>0)}; setBag();
+const cnt=()=>rd().reduce((a,l)=>a+l.qty,0);
+const setBag=()=>{bagN.textContent=cnt();bagN.classList.toggle('on',cnt()>0)}; setBag();
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2600)}
 document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){location.href='product.html#'+g.dataset.go;return}
   const b=e.target.closest('[data-add]'); if(!b) return;
-  if(b.classList.contains('card')){ say('The '+b.dataset.add+' page is coming soon'); return; }
-  e.preventDefault(); bag++; try{localStorage.setItem('zal-bag',bag)}catch(_){} setBag();
+  e.preventDefault(); const c=rd(); const ex=c.find(l=>l.id===b.dataset.add&&l.ml===50); if(ex)ex.qty++; else c.push({id:b.dataset.add,ml:50,qty:1});
+  try{localStorage.setItem('zal6-cart',JSON.stringify(c))}catch(_){} setBag();
   bagN.animate([{transform:'scale(1.6)'},{transform:'scale(1)'}],{duration:600,easing:'cubic-bezier(.16,1,.3,1)'});
-  say(b.dataset.add+' added to your bag');
+  say((b.dataset.nm||b.dataset.add)+' added to your bag');
 });
-$('#bagBtn').onclick=()=>say(bag?`${bag} item${bag>1?'s':''} in your bag`:'Your bag is empty');
+$('#bagBtn').onclick=()=>{const c=rd();c.length?location.href='product.html#'+c[0].id:say('Your bag is empty')};
 
 /* ---------- join ---------- */
 $('#join').addEventListener('submit',e=>{e.preventDefault();const v=$('#email').value.trim();const m=$('#joinMsg');
