@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zalbera — Maison de Parfum</title>
+<title>Zalbera · Maison de Parfum</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Tenor+Sans&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@ img{display:block;max-width:100%}
 .gold-text{background:var(--goldgrad);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 9s linear infinite}
 @keyframes sheen{to{background-position:-200% 0}}
 .eyebrow{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
-.eyebrow::before{content:"";display:inline-block;width:28px;height:1px;background:currentColor;vertical-align:middle;margin-right:14px;opacity:.7}
+
 .wrap{width:min(1320px,100% - 64px);margin:0 auto}
 
 /* grain + vignette */
@@ -460,7 +460,7 @@ footer{background:var(--night);border-top:1px solid var(--line);padding:90px 0 3
       <div class="eyebrow" data-r>The Maison</div>
       <p data-r>Every bottle is fluted glass, crowned in gold and filled with an eau de parfum built to last from the first spray to the last light.</p>
     </div>
-    <p class="mani-text" id="mani">We believe a fragrance should be worn like <span class="g">gold</span> — close to the skin, quietly <span class="g">unforgettable</span>, and entirely your own. Eight compositions. One <span class="g">signature</span> trail.</p>
+    <p class="mani-text" id="mani">We believe a fragrance should be worn like <span class="g">gold</span>, close to the skin, quietly <span class="g">unforgettable</span>, and entirely your own. Eight compositions. One <span class="g">signature</span> trail.</p>
   </div>
 </section>
 
@@ -595,7 +595,7 @@ track.innerHTML=P.map((p,i)=>`
  <article class="card" style="--tint:${p.tint}" data-cursor="view" data-add="${p.name}">
   <div class="card-img"><img src="${img(p)}" alt="Zalbera ${p.name} eau de parfum" loading="lazy" style="${p.id==='alfaro'?'object-position:50% 50%;':''}">
    <div class="card-notes">${p.notes.map(n=>`<span>${n}</span>`).join('')}</div></div>
-  <div class="card-info"><div><div class="no">${String(i+1).padStart(2,'0')} — Eau de parfum</div><h3>${p.name}</h3><p>${p.prof}</p></div>
+  <div class="card-info"><div><div class="no">${String(i+1).padStart(2,'0')} · Eau de parfum</div><h3>${p.name}</h3><p>${p.prof}</p></div>
    <span class="card-go"><svg viewBox="0 0 14 14"><path d="M1 13L13 1M5 1h8v8"/></svg></span></div>
  </article>`).join('')+`
  <div class="card end"><div class="end-in"><div class="eyebrow" style="margin:0">Can't choose?</div><div class="serif">Let your mood decide.</div><a href="#finder" class="btn btn-ghost" data-h><span class="lbl">Find your scent</span></a></div></div>`;
@@ -748,7 +748,7 @@ const setBag=()=>{bagN.textContent=bag;bagN.classList.toggle('on',bag>0)}; setBa
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2600)}
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-add]'); if(!b) return;
-  if(b.classList.contains('card')){ say(b.dataset.add+' — product page coming soon'); return; }
+  if(b.classList.contains('card')){ say('The '+b.dataset.add+' page is coming soon'); return; }
   e.preventDefault(); bag++; try{localStorage.setItem('zal-bag',bag)}catch(_){} setBag();
   bagN.animate([{transform:'scale(1.6)'},{transform:'scale(1)'}],{duration:600,easing:'cubic-bezier(.16,1,.3,1)'});
   say(b.dataset.add+' added to your bag');
@@ -757,7 +757,7 @@ $('#bagBtn').onclick=()=>say(bag?`${bag} item${bag>1?'s':''} in your bag`:'Your 
 
 /* ---------- join ---------- */
 $('#join').addEventListener('submit',e=>{e.preventDefault();const v=$('#email').value.trim();const m=$('#joinMsg');
-  m.textContent=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'Thank you — welcome to the circle.':'Please enter a valid email address.';m.classList.add('on')});
+  m.textContent=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'Thank you. Welcome to the circle.':'Please enter a valid email address.';m.classList.add('on')});
 $('#yr').textContent=new Date().getFullYear();
 
 /* ---------- main loop ---------- */

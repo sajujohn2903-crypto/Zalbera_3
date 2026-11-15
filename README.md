@@ -1,4 +1,4 @@
-# Zalbera — Maison de Parfum
+# Zalbera · Maison de Parfum
 
 Black-and-gold landing page for Zalbera eau de parfum: a slowly spinning 3D gold bottle behind the
 title, gold dust, a notes marquee, the Maison manifesto, a horizontal-scroll collection of all
