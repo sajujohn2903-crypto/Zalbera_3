@@ -110,7 +110,8 @@ img{display:block;max-width:100%}
 @keyframes breathe{50%{opacity:.75;transform:translate(-50%,-50%) scale(1.06)}}
 #dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hero-word{position:absolute;z-index:3;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;font-family:var(--serif);font-size:clamp(90px,19.5vw,330px);line-height:1;letter-spacing:.04em;white-space:nowrap;pointer-events:none;user-select:none}
-.hero-word .ch{display:inline-block;overflow:hidden;vertical-align:top}
+.hero-word{display:flex;justify-content:center;padding-left:.04em}
+.hero-word .ch{display:inline-block;overflow:hidden;vertical-align:top;flex:none}
 .hero-word .ch b{display:inline-block;font-weight:400;transform:translateY(105%);background:var(--goldgrad);background-size:500% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.95}
 .ready .hero-word .ch b{transform:none;transition:transform 1.6s var(--ease)}
 .hero-word.ghost{z-index:3;-webkit-text-stroke:1px rgba(244,174,82,.55);clip-path:inset(0 0 0 0)}
@@ -327,13 +328,13 @@ footer{background:var(--night);border-top:1px solid var(--line);padding:90px 0 3
   .wrap{width:calc(100% - 40px)}
   .brand .w{width:104px}.brand .m{width:18px;height:25px}
   .hero{padding:96px 0 0;align-items:start;min-height:100svh}
-  .hero-word{top:27%;font-size:17.5vw;letter-spacing:.02em}
+  .hero-word{top:27%;font-size:17.5vw;letter-spacing:.02em;padding-left:.02em}
   .bottle{height:min(54svh,480px);margin-top:4vh}
   .hero-meta{bottom:28px}
   .hero-meta .wrap{flex-direction:column;align-items:stretch;gap:0}
   .hero-copy{max-width:none;text-align:center}
   .hero-copy .eyebrow{display:none}
-  .hero-copy h1{font-size:23px;margin:0 0 20px}
+  .hero-copy h1{font-size:23px;margin:0 auto 20px;max-width:340px}
   .hero-ctas{justify-content:center}
   .hero-ctas{flex-wrap:nowrap;gap:10px}
   .hero-ctas .btn{height:50px;padding:0 14px;flex:1;justify-content:center;letter-spacing:.2em;font-size:10.5px;white-space:nowrap}
@@ -609,6 +610,12 @@ $('#mq').innerHTML=mqHalf+mqHalf;
 /* ---------- hero letters ---------- */
 ['#hw'].forEach((s,k)=>{const el=$(s);el.innerHTML=[...el.textContent].map((c,i)=>`<span class="ch"><b style="transition-delay:${.15+i*.07}s;background-position:${i*16}% 0">${c}</b></span>`).join('')});
 
+
+/* keep the hero wordmark centred and inside the screen on phones, whatever font metrics load */
+function fitWord(){const el=document.getElementById('hw');if(!el)return;el.style.fontSize='';
+  if(innerWidth>760)return;const max=innerWidth*.9,w=[...el.children].reduce((a,c)=>a+c.getBoundingClientRect().width,0);
+  if(w>max){const fs=parseFloat(getComputedStyle(el).fontSize);el.style.fontSize=(fs*max/w).toFixed(1)+'px'}}
+fitWord();addEventListener('resize',fitWord);document.fonts&&document.fonts.ready.then(fitWord);
 /* ---------- manifesto words ---------- */
 const mani=$('#mani');
 (function splitWords(node){
